@@ -1,5 +1,7 @@
 package com.task_flow.Task_SpringBoot.services.auth;
 
+import com.task_flow.Task_SpringBoot.dto.SignupRequest;
+import com.task_flow.Task_SpringBoot.dto.UserDto;
 import com.task_flow.Task_SpringBoot.entities.User;
 import com.task_flow.Task_SpringBoot.enums.UserRole;
 import com.task_flow.Task_SpringBoot.repositories.UserRepository;
@@ -24,9 +26,26 @@ public class AuthServiceImpl implements AuthService {
             user.setEmail("admin@test.com");
             user.setName("admin");
             user.setPassword(new BCryptPasswordEncoder().encode("admin"));
+            userRepository.save(user);
+            System.out.println("Admin Account created successfully");
         } else {
             System.out.println("Admin account already exists!");
         }
+    }
+
+    @Override
+    public UserDto signupUser(SignupRequest signupRequest) {
+        User user = new User();
+        user.setEmail(signupRequest.getEmail());
+        user.setName(signupRequest.getName());
+        user.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
+        user.setUserRole(UserRole.EMPLOYEE);
+        User createdUser = userRepository.save(user);
+        return createdUser.getUserDto();
+    }
+
+    public boolean hasUserWithEmail(String email) {
+        return userRepository.findFirstByEmail(email).isPresent();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.task_flow.Task_SpringBoot.entities;
 
+import com.task_flow.Task_SpringBoot.dto.UserDto;
 import com.task_flow.Task_SpringBoot.enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,4 +51,14 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public UserDto getUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        userDto.setName(name);
+        userDto.setEmail(email);
+        userDto.setUserRole(userRole);
+        return userDto;
+    }
+
 }
